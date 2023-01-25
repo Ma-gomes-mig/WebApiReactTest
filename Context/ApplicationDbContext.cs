@@ -7,24 +7,24 @@ namespace AlunosApi.Context
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
-        public DbSet<AlunoModel> Alunos { get; set; }
+        public DbSet<StudentModel> Students { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<AlunoModel>().HasData(
-                new AlunoModel
+            modelBuilder.Entity<StudentModel>().HasData(
+                new StudentModel
                 {
-                    AlunoId = 1,
-                    AlunoName = "Miguel",
+                    StudentId = 1,
+                    StudentName = "Miguel",
                     Email = "MiguelGomes@yahoo.com",
-                    Idade = 8
+                    Age = 8
                 },
-                new AlunoModel
+                new StudentModel
                 {
-                    AlunoId = 2,
-                    AlunoName = "Matheus",
+                    StudentId = 2,
+                    StudentName = "Matheus",
                     Email = "Matheus.gom23@yahoo.com",
-                    Idade = 29
+                    Age = 29
                 });
         }
     }
