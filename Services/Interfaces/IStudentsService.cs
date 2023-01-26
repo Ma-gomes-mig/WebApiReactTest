@@ -10,6 +10,6 @@ namespace AlunosApi.Services.Interfaces
         Task<IEnumerable<StudentModel>> GetStudentByName(string name);
         Task CreateStudent(StudentModel student);
         Task UpdateStudent(StudentModel student);
-        Task DeleteStudent(int id);
+        Task DeleteStudent(StudentModel student);
     }
 }

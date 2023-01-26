@@ -75,15 +75,8 @@ namespace AlunosApi.Services
 
         public async Task UpdateStudent(StudentModel student)
         {
-            try
-            {
-                _dbContext.Entry(student).State = EntityState.Modified;
-                await _dbContext.SaveChanges();
-            }
-            catch
-            {
-                throw;
-            }
+            _dbContext.Entry(student).State = EntityState.Modified;
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task DeleteStudent(StudentModel student)
