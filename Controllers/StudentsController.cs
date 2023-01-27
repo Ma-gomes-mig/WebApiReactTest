@@ -62,7 +62,7 @@ namespace AlunosApi.Controllers
             }
         }
 
-        [HttpPut]
+        [HttpPut("{id = int")]
         public async Task<ActionResult> EditStudent(int id, [FromBody] StudentModel student)
         {
             try
