@@ -82,5 +82,28 @@ namespace AlunosApi.Controllers
                 return BadRequest("Invalid Request");
             }
         }
+
+        [HttpDelete("{id=int}")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            try
+            {
+                var student = await _studentsService.GetStudent(id);
+                if(student != null)
+                {
+                    await _studentsService.DeleteStudent(student);
+                    return Ok($"Student with id={id} was delete");
+                }
+                else
+                {
+                    return NotFound($"Student with id={id} not found");
+                }
+            }
+            catch
+            {
+                return BadRequest("Invalid Request");
+            }
+        }
+
     }
 }
