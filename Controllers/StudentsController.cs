@@ -61,5 +61,26 @@ namespace AlunosApi.Controllers
                 return BadRequest("Invalid request");
             }
         }
+
+        [HttpPut]
+        public async Task<ActionResult> EditStudent(int id, [FromBody] StudentModel student)
+        {
+            try
+            {
+                if(student.StudentId == id)
+                {
+                    await _studentsService.UpdateStudent(student);
+                    return Ok($"Student with id={id} get update");
+                }
+                else
+                {
+                    return BadRequest("Inconsistent data");
+                }                
+            }
+            catch
+            {
+                return BadRequest("Invalid Request");
+            }
+        }
     }
 }
