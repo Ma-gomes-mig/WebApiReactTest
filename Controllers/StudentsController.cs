@@ -48,6 +48,18 @@ namespace AlunosApi.Controllers
             }
         }
 
-
+        [HttpPost]
+        public async Task<ActionResult> CreateStudenty(StudentModel student)
+        {
+            try
+            {
+                await _studentsService.CreateStudent(student);
+                return CreatedAtRoute(nameof(GetStudents), new {id = student.StudentId}, student);
+            }
+            catch
+            {
+                return BadRequest("Invalid request");
+            }
+        }
     }
 }
