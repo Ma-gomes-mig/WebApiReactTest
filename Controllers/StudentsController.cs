@@ -2,6 +2,7 @@
 using AlunosApi.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection.Metadata.Ecma335;
 
 namespace AlunosApi.Controllers
 {
@@ -12,7 +13,7 @@ namespace AlunosApi.Controllers
         private IStudentsService _studentsService;
         public StudentsController(IStudentsService studentsService)
         {
-            _studentsService= studentsService;
+            _studentsService = studentsService;
         }
 
         [HttpGet]
@@ -37,7 +38,7 @@ namespace AlunosApi.Controllers
             try
             {
                 var student = await _studentsService.GetStudentByName(name);
-                if (student.Count() == 0)
+                if (student == null)
                     return NotFound($"Não existe alunos com o critério {name}");
 
                 return Ok(student);
@@ -48,34 +49,16 @@ namespace AlunosApi.Controllers
             }
         }
 
-        [HttpPost]
-        public async Task<ActionResult> CreateStudenty(StudentModel student)
-        {
-            try
-            {
-                await _studentsService.CreateStudent(student);
-                return CreatedAtRoute(nameof(GetStudents), new {id = student.StudentId}, student);
-            }
-            catch
-            {
-                return BadRequest("Invalid request");
-            }
-        }
 
-        [HttpPut("{id = int")]
-        public async Task<ActionResult> EditStudent(int id, [FromBody] StudentModel student)
+        [HttpGet("{id:int}", Name = "GetStudent")]
+        public async Task<ActionResult<StudentModel>> GetStudent(int id)
         {
             try
             {
-                if(student.StudentId == id)
-                {
-                    await _studentsService.UpdateStudent(student);
-                    return Ok($"Student with id={id} get update");
-                }
-                else
-                {
-                    return BadRequest("Inconsistent data");
-                }                
+                var student = await _studentsService.GetStudent(id);
+                if (student == null)
+                    return NotFound($"Not Exist student with i={id}");
+                return Ok(student);
             }
             catch
             {
@@ -83,13 +66,49 @@ namespace AlunosApi.Controllers
             }
         }
 
-        [HttpDelete("{id=int}")]
+
+        [HttpPost("CreateStudent")]
+        public async Task<ActionResult> Create(StudentModel student)
+        {
+            try
+            {
+                await _studentsService.CreateStudent(student);
+                return CreatedAtRoute(nameof(GetStudent), new { id = student.StudentId }, student);
+            }
+            catch
+            {
+                return BadRequest("Invalid request");
+            }
+        }
+
+        [HttpPut("{id:int}", Name ="EditStudent")]
+        public async Task<ActionResult> EditStudent(int id, [FromBody] StudentModel student)
+        {
+            try
+            {
+                if (student.StudentId == id)
+                {
+                    await _studentsService.UpdateStudent(student);
+                    return Ok($"Student with id={id} get update");
+                }
+                else
+                {
+                    return BadRequest("Inconsistent data");
+                }
+            }
+            catch
+            {
+                return BadRequest("Invalid Request");
+            }
+        }
+
+        [HttpDelete("{id:int}")]
         public async Task<ActionResult> DeleteStudent(int id)
         {
             try
             {
                 var student = await _studentsService.GetStudent(id);
-                if(student != null)
+                if (student != null)
                 {
                     await _studentsService.DeleteStudent(student);
                     return Ok($"Student with id={id} was delete");
